@@ -2,11 +2,11 @@
 
 Language Independent, Platform Independent GUI took kit
 
-# Motivation
+## Motivation
 
 The idea of using the browsers capabilities to add a platform independent gui to you program is not new. However, it hasn't had a lot of success so far the only program I know that uses it is git-annex. I think the reason for this is that web development is complicated, and so are the frameworks you might use. Additionally, most frameworks are created with thoughts like restful and webstore in mind. Those are good concepts, but if you are doing something interactive it's hard to think about all the things you would have to update in one tab if something changes in an other or on the server.
 
-# Solution
+## Solution
 
 Surely you have been wondering how a gui tool kit/web framework could ever be programming language independent. We did have CGI (just forwarding the standard output to the browser) that was language independent, but it wasn't very interactive. So what we will try to do is make CGI interactive. When a client connects to the webserver with a specific url or a specific prefix the server will execute our program *myapp*.
 
@@ -16,10 +16,10 @@ As soon as more, output of *myapp* is available it will be sent through the webs
 
 As stdin of *myapp* you will receive anything that is written to the browser writes to the websocket.
 
-# Implementation
+## Implementation
 
 I'm not sure if formated html can be sent through websocket but i think there is a way to implement this that doesn't require javascript to parse anything.
 
-# Comments
+## Comments
 
 I haven't written any code yet but comments suggestions are welcome yokto.reports*at*gmail.com.
