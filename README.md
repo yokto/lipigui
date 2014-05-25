@@ -10,16 +10,18 @@ The idea of using the browsers capabilities to add a platform independent gui to
 
 Surely you have been wondering how a gui tool kit/web framework could ever be programming language independent. We did have CGI (just forwarding the standard output to the browser) that was language independent, but it wasn't very interactive. So what we will try to do is make CGI interactive. When a client connects to the webserver with a specific url or a specific prefix the server will execute our program *myapp*.
 
-The webserver will read from *myapp*'s standard output until it blocks if the opening tag of &lt;body&gt; has not been reached, it waits. other wise it will close all unclosed tags and send the it off to the browser. It will also insert a little script in the meta section that will open a websocket to connect to the webserver and that will place assign to *position* variable with the innermost unclosed element.
+The webserver will read from *myapp*'s standard output until it blocks if the opening tag of &lt;body&gt; has not been reached, it waits. Otherwise, it will close all unclosed tags and send the it off to the browser. It will also insert a little script that will open a websocket to the webserver,  that will set the javascript variable *ICGI.position* to the innermost unclosed element, and that will provide a *ICGI.send()* method to send data back to the *myapp.
 
-As soon as more, output of *myapp* is available it will be sent through the websocket and appended to the website. When encountering a closing tag that was not opened in that part, will tell the browser to set *position* to the parent of the current element if the tag is correct and call an error otherwise. If a script tag is reached it will be sent to the browser and executed. Since the server doesn't keep track of opening/closing tags, you can also set *position* to wherever you want and start adding data there. Of course to delete something you have to send a script tag or use javascript some other way.
+As soon as more, output of *myapp* is available it will be sent through the websocket and appended to *ICGI.position*. When encountering a closing tag that was not opened in that part, will tell the browser to set *ICGI.position* to the parent of the current element if the tag is correct and call an error otherwise. If a script tag with class="ICGI_EVAL" is reached it will be sent to the browser and executed otherwise it will just be appended. Since the server doesn't keep track of opening/closing tags, you can also set *ICGI.position* to wherever you want and start appending data there. Of course to delete something you have to send a script tag or use javascript some other way.
 
-As stdin of *myapp* you will receive anything that is written to the browser writes to the websocket.
+As stdin of *myapp* you will receive anything that is sent by the browser via *ICGI.send().
+
+take a look at ths simplest chat program ever [https://github.com/yokto/lipigui/blob/master/chat.icgi](https://github.com/yokto/lipigui/blob/master/chat.icgi) written in Bash
 
 ## Implementation
 
 There is some very basic python code ./server.py that just runs a icgi server in the current directory on port 8888. There is also a very basic chat program written in Bash that you can test if the server runs.
-(localhost:8888/chat.icgi)
+[localhost:8888/chat.icgi](localhost:8888/chat.icgi)
 
 You will need to install
 

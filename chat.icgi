@@ -1,5 +1,7 @@
 #!/bin/bash
+# write the made up mimetype that is used by server.py
 echo "application/icgi"
+# write the basic html code to stdout
 cat << EOF
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -15,16 +17,19 @@ cat << EOF
 <script type="application/javascript" class="ICGI_EVAL">ICGI.position = document.getElementById('show')</script>
 EOF
 
+# make a random variable
 RAND=chat_fifo_`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 32`
-echo $RAND >2
+# make a pipe from which all the input of other chat.icgi instances will come
 mkfifo $RAND
 
+# read from the pipe and write it to stdout
 while true
 do
 	read  inline < $RAND
 	echo -n $inline
 done &
-	
+
+# read stdin and write it to all the pipes of the other instances of chat.icgi
 while read outline
 do
 	for file in chat_fifo_*
@@ -33,6 +38,9 @@ do
 	done
 done
 
-exec 1>&- # close stdout
+# close stdout
+exec 1>&-
+# killall the jobs that might still be pending
 kill `jobs -p`
+# remove the pipe
 rm $RAND
