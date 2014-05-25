@@ -18,7 +18,11 @@ As stdin of *myapp* you will receive anything that is written to the browser wri
 
 ## Implementation
 
-I'm not sure if formated html can be sent through websocket but i think there is a way to implement this that doesn't require javascript to parse anything.
+There is some very basic python code ./server.py that just runs a icgi server in the current directory on port 8888. There is also a very basic chat program written in Bash that you can test if the server runs.
+(localhost:8888/chat.icgi)
+
+You will need to install
+	apt-get install python3-tornado
 
 ## Comments
 

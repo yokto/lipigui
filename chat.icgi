@@ -1,0 +1,38 @@
+#!/bin/bash
+echo "application/icgi"
+cat << EOF
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<body>
+
+<div id="show"></div>
+<input type="text" id="input" onkeydown="
+	if (event.keyCode == 13) {
+		el=document.getElementById('input');
+		ICGI.send(el.value+'<br/>\n');
+		el.value=''}"/>
+<script type="application/javascript" class="ICGI_EVAL">ICGI.position = document.getElementById('show')</script>
+EOF
+
+RAND=chat_fifo_`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 32`
+echo $RAND >2
+mkfifo $RAND
+
+while true
+do
+	read  inline < $RAND
+	echo -n $inline
+done &
+	
+while read outline
+do
+	for file in chat_fifo_*
+	do
+		echo $outline > $file &
+	done
+done
+
+exec 1>&- # close stdout
+kill `jobs -p`
+rm $RAND
